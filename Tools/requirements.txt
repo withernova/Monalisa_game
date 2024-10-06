@@ -1,0 +1,17 @@
+cupy
+joblib
+lupa
+numpy
+opencv-python
+openpyxl
+pandas
+Pillow
+psd-tools
+PyHyphen
+python-docx
+pythonnet
+pytoshop
+scikit-image
+scipy
+speedy-antlr-lua-parser
+tqdm

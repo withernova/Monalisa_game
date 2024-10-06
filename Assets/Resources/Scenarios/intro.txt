@@ -1,0 +1,117 @@
+@<|
+label('intro', '震惊世界的画作')
+is_unlocked_start()
+|>
+<|
+anim:trans_fade(cam, function()
+        show(bg, 'home')  -- 显示玩家的家作为背景
+    end, 2)
+set_box()
+|>
+**铃铃铃铃**
+
+你被一阵喧闹的电话铃声吵醒了
+
+揉揉眼睛看看表，你发现现在已经是中午了
+
+你伸手去够电话
+@<| jump_to '记者朋友' |>
+
+@<| label '记者朋友' |>
+<|
+v_name = '记者威尔'
+v_background = '你是一名记者，是主角的好朋友。你和主角的对话在电话中进行，并且是你主动打来电话的，想要告诉什么都不知道的主角出现了大事情，对于主角的第一次询问，你要简要介绍一下事情除细节以外的概况'
+v_bye = '我托人给你带了一份带有这件事消息的报纸，在你门口了，没事我先挂了'
+v_reveal = '是货真价实的大新闻，卢浮宫的蒙娜丽莎出现了一个一模一样的仿真品；似乎是昨晚刚刚发生的；馆内的安保人员并没有透露太多的内幕；似乎并不是团队作案'
+v_unreveal = '由于和主角关系很好，所以没有太多想隐瞒的消息，但是如果主角追问会给出自己为什么认为这个案件不是团队作案的原因：政府高层之类的并没有被这个案件过多的惊动'
+v_personality = '随和，大大咧咧的，因为是主角的朋友，所以不怎么讲究礼貌'
+v_fail = '你说啥，没听见，我这边信号有点不好'
+v_response = 'init'
+|>
+威尔：：喂喂喂，听得到吗
+
+[stage = before_checkpoint]<|
+set_box('hide')
+minigame(__Nova.uiPrefabLoader, 'ExampleMinigame')
+hide(__Nova.prefabLoader)
+set_box()
+|>
+威尔：：{{v_response}}
+
+@<|
+branch {
+    { dest = '记者朋友', mode = 'jump', cond = 'not v_flag_fin'},
+    { dest = 'newspaper',  mode = 'jump', cond = 'v_flag_fin'},
+}
+|>
+
+@<| label 'newspaper' |>
+<|
+show(fg, 'newspaper', pos_c)  -- 报纸作为前景显示
+set_box('full', 'dark')
+|>
+**全球头条新闻：卢浮宫惊现第二幅《蒙娜丽莎》！真假难辨，专家震惊**
+
+巴黎，2024年9月17日——今天清晨，世界著名博物馆卢浮宫出现了一件令人震惊的事件。位于博物馆核心展厅的著名画作《蒙娜丽莎》旁，突然出现了一幅几乎不可区分的“复制品”。这幅画的细节与原作如此相似，以至于连最先进的鉴定技术都无法分辨出两者的区别。
+
+专家与学者们对新画作的真实来源感到困惑。多位艺术品鉴定专家和科学家已经受邀前往卢浮宫，希望通过各种技术手段揭开这幅画作的真相。
+
+**两幅《蒙娜丽莎》？真假难辨的艺术谜题**
+
+卢浮宫发言人声明：“我们已经采取了紧急措施，封锁了展厅并召集了全球顶尖的艺术品鉴定专家。初步的显微分析和X射线扫描显示，这幅新出现的画作在颜料成分、纸张纤维、甚至画面的裂纹和老化痕迹上，与原作完全一致。这引发了人们对艺术品真实性的深刻疑问。”
+
+全球顶尖的艺术品鉴定专家小组已经抵达卢浮宫，并对这幅画作展开了全面调查。然而，至今没有任何人能够解释这幅画作的来源。
+
+<|
+hide(fg)  -- 隐藏报纸前景
+set_box()
+|>
+你放下了手中的报纸，陷入了沉思。作为一名深谙此道的专家，你隐隐觉得这件事情绝非表面那么简单。
+@<|
+-- 选择角色身份并记录flag
+branch {
+    { dest = 'scientist_intro', text = '我看了看墙上挂着的科学奖章。', flag = 'scientist_flag' },
+    { dest = 'mystic_intro', text = '我看了看书架上摆放的古老符文。', flag = 'mystic_flag' },
+    { dest = 'barbarian_intro', text = '我拿起了胸前挂着的狗牌。', flag = 'barbarian_flag' },
+    { dest = 'shinji_intro', text = '作为一位beautiful boy。', flag = 'shinji_flag' }
+}
+|>
+
+@<| label('scientist_intro') |>
+<|
+gv_job ='tech'  -- 记录身份为科学家
+set_box()
+|>
+你是一位著名的科学家，曾在分子物理领域取得了许多突破性成果。对于卢浮宫事件，你敏锐地察觉到这可能不仅仅是一次简单的艺术品复制。背后是否隐藏着更深层次的科学秘密？
+@<| jump_to 'investigation_start' |>
+
+@<| label('mystic_intro') |>
+<|
+gv_job = 'magician'  -- 记录身份为神秘学家
+set_box()
+|>
+你是一名神秘学家，熟知古老的禁忌知识和隐秘的符文。对于卢浮宫的事件，你觉得这可能不仅仅是科学能够解释的现象，或许背后隐藏着某种超自然的力量。
+@<| jump_to 'investigation_start' |>
+
+@<| label('barbarian_intro') |>
+<|
+gv_job = 'barbarian'  -- 记录身份为突击队队员
+set_box()
+|>
+你曾是金钱豹突击队的一员，凭借着强大的体能和战斗经验，你本不太相信这些所谓的“艺术谜团”。但这个事件触动了你深埋的怀疑。
+@<| jump_to 'investigation_start' |>
+
+@<| label('shinji_intro') |>
+<|
+gv_job = 'charm'  -- 记录身份为"beautiful boy"
+set_box()
+|>
+作为前eva驾驶员，你认为这是使徒出现了。
+@<| jump_to 'investigation_start' |>
+
+@<| label('investigation_start') |>
+<|
+set_box()
+|>
+你决定亲自前往卢浮宫调查这起事件，不论是科学的谜团，还是神秘的力量，你都要揭开这幅画背后的真相。
+@<| jump_to '卢浮宫' |>
